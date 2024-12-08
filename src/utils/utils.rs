@@ -17,3 +17,14 @@ pub fn read_input(file_path: &str) -> Result<Vec<Vec<String>>, Error> {
 
     Ok(lines)
 }
+pub fn read_input_no_separator(file_path: &str) -> Result<Vec<String>, Error> {
+    let file = File::open(&file_path)?;
+    let reader = BufReader::new(file);
+    let mut lines: Vec<String> = Vec::new();
+    for line in reader.lines() {
+        //pushing each line into my vector
+        lines.push(line?);
+    }
+
+    Ok(lines)
+}

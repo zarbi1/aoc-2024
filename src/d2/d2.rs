@@ -1,50 +1,60 @@
 use std::fmt::Error;
 
-use crate::utils::utils::read_input;
+use crate::{traits::DayActivity, utils::utils::read_input};
+
+pub struct Day2<'a> {
+    file_path: &'a str,
+}
+
+impl<'a> Day2<'a> {
+    pub fn new(file_path: &'a str) -> Self {
+        Day2 { file_path }
+    }
+}
+
+impl<'a> DayActivity for Day2<'a> {
+    fn step_1(&self) -> Result<i32, Error> {
+        let content = read_input(self.file_path).unwrap_or_else(|error| {
+            panic!("Could not extract text: {:?}", error);
+        });
+
+        //now we compute the number of safe reports
+        let mut safe_reports = 0;
+        for report in content {
+            if is_safe(&report) {
+                safe_reports += 1;
+                continue;
+            }
+        }
+        Ok(safe_reports)
+    }
+    fn step_2(&self) -> Result<i32, Error> {
+        let content = read_input(self.file_path).unwrap_or_else(|error| {
+            panic!("Could not extract text: {:?}", error);
+        });
+
+        let mut safe_reports = 0;
+        for report in &content {
+            if is_safe(report) {
+                safe_reports += 1;
+                continue;
+            }
+
+            // Try removing each level
+            for remove_idx in 0..report.len() {
+                if is_safe_without_level(report, remove_idx) {
+                    safe_reports += 1;
+                    break;
+                }
+            }
+        }
+        Ok(safe_reports)
+    }
+}
 enum Direction {
     NotSet,
     Up,
     Down,
-}
-pub fn get_nb_safe(file_path: &str) -> Result<i32, Error> {
-    //first we get the values
-
-    let content = read_input(file_path).unwrap_or_else(|error| {
-        panic!("Could not extract text: {:?}", error);
-    });
-
-    //now we compute the number of safe reports
-    let mut safe_reports = 0;
-    for report in content {
-        if is_safe(&report) {
-            safe_reports += 1;
-            continue;
-        }
-    }
-    Ok(safe_reports)
-}
-
-pub fn get_nb_safe_2(file_path: &str) -> Result<i32, Error> {
-    let content = read_input(file_path).unwrap_or_else(|error| {
-        panic!("Could not extract text: {:?}", error);
-    });
-
-    let mut safe_reports = 0;
-    for report in &content {
-        if is_safe(report) {
-            safe_reports += 1;
-            continue;
-        }
-
-        // Try removing each level
-        for remove_idx in 0..report.len() {
-            if is_safe_without_level(report, remove_idx) {
-                safe_reports += 1;
-                break;
-            }
-        }
-    }
-    Ok(safe_reports)
 }
 
 fn is_safe(report: &Vec<String>) -> bool {
