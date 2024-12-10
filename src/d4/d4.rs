@@ -39,6 +39,7 @@ impl<'a> DayActivity for Day4<'a> {
                     let mut current_word = String::new();
                     let mut r = start_row as i32;
                     let mut c = start_col as i32;
+                    let mut is_match = true;
 
                     //building word
                     for _ in 0..4 {
@@ -46,6 +47,7 @@ impl<'a> DayActivity for Day4<'a> {
                         if r >= 0 && r < rows as i32 && c >= 0 && c < cols as i32 {
                             current_word.push(content[r as usize].as_bytes()[c as usize] as char);
                         } else {
+                            is_match = false;
                             break;
                         }
 
@@ -55,10 +57,8 @@ impl<'a> DayActivity for Day4<'a> {
                     }
 
                     // Check forward and backward
-                    if current_word == target
-                        || current_word.chars().rev().collect::<String>() == target
-                    {
-                        results.insert((start_row, start_col, current_word));
+                    if is_match && current_word == target {
+                        results.insert((start_row, start_col, dx, dy));
                     }
                 }
             }
@@ -67,6 +67,6 @@ impl<'a> DayActivity for Day4<'a> {
         Ok(results.len() as i32)
     }
     fn step_2(&self) -> Result<i32, std::fmt::Error> {
-        Ok(1)
+        Ok(-1) // I tried a lot of things but my brain said stop
     }
 }

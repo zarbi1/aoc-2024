@@ -19,6 +19,7 @@ fn main() {
         Box::new(Day2::new("/home/hadrien/aoc-2024/inputs/day2")),
         Box::new(Day3::new("/home/hadrien/aoc-2024/inputs/day3")),
         Box::new(Day4::new("/home/hadrien/aoc-2024/inputs/day4")),
+        Box::new(Day5::new("/home/hadrien/aoc-2024/inputs/day5")),
     ];
     for (i, day) in days.iter().enumerate() {
         call_activity(&**day, &(i + 1));
