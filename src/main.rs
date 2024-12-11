@@ -24,12 +24,15 @@ fn main() {
     let day3_path = file_path.join("day3").to_string_lossy().into_owned();
     let day4_path = file_path.join("day4").to_string_lossy().into_owned();
     let day5_path = file_path.join("day5").to_string_lossy().into_owned();
+    let day6_path = file_path.join("day6").to_string_lossy().into_owned();
+
     let days: Vec<Box<dyn DayActivity>> = vec![
         Box::new(Day1::new(&day1_path)),
         Box::new(Day2::new(&day2_path)),
         Box::new(Day3::new(&day3_path)),
         Box::new(Day4::new(&day4_path)),
         Box::new(Day5::new(&day5_path)),
+        Box::new(Day5::new(&day6_path)),
     ];
     for (i, day) in days.iter().enumerate() {
         call_activity(&**day, &(i + 1));
