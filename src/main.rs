@@ -5,6 +5,7 @@ use aoc::d2::d2::Day2;
 use aoc::d3::d3::Day3;
 use aoc::d4::d4::Day4;
 use aoc::d5::d5::Day5;
+use aoc::d6::d6::Day6;
 use aoc::traits::DayActivity;
 
 fn call_activity(day: &dyn DayActivity, day_number: &usize) {
@@ -32,7 +33,7 @@ fn main() {
         Box::new(Day3::new(&day3_path)),
         Box::new(Day4::new(&day4_path)),
         Box::new(Day5::new(&day5_path)),
-        Box::new(Day5::new(&day6_path)),
+        Box::new(Day6::new(&day6_path)),
     ];
     for (i, day) in days.iter().enumerate() {
         call_activity(&**day, &(i + 1));
