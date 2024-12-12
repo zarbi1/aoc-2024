@@ -6,6 +6,7 @@ use aoc::d3::d3::Day3;
 use aoc::d4::d4::Day4;
 use aoc::d5::d5::Day5;
 use aoc::d6::d6::Day6;
+use aoc::d7::d7::Day7;
 use aoc::traits::DayActivity;
 
 fn call_activity(day: &dyn DayActivity, day_number: &usize) {
@@ -26,6 +27,7 @@ fn main() {
     let day4_path = file_path.join("day4").to_string_lossy().into_owned();
     let day5_path = file_path.join("day5").to_string_lossy().into_owned();
     let day6_path = file_path.join("day6").to_string_lossy().into_owned();
+    let day7_path = file_path.join("day7").to_string_lossy().into_owned();
 
     let days: Vec<Box<dyn DayActivity>> = vec![
         Box::new(Day1::new(&day1_path)),
@@ -34,6 +36,7 @@ fn main() {
         Box::new(Day4::new(&day4_path)),
         Box::new(Day5::new(&day5_path)),
         Box::new(Day6::new(&day6_path)),
+        Box::new(Day7::new(&day7_path)),
     ];
     for (i, day) in days.iter().enumerate() {
         call_activity(&**day, &(i + 1));
