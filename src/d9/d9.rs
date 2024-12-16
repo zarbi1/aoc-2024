@@ -18,19 +18,19 @@ impl<'a> DayActivity for Day9<'a> {
         let content = read_input_no_separator(self.file_path).unwrap_or_else(|error| {
             panic!("Could not extract text: {:?}", error);
         });
+        println!("{:?}", content.len());
         let line = build_line(&content[0]);
-        println!("{:?}", &line);
         let mut queue = build_queue(&line);
         let mut i = 0;
         //now we dequeue
-        let mut result = 0;
+        let mut result: i128 = 0;
 
-        println!("{:?}", queue);
         while let Some(current) = queue.pop_front() {
-            result += current * i;
+            result += (current * i);
             i += 1;
         }
-        Ok(result)
+        println!("{:?}", result);
+        Ok(result as i32)
     }
 
     fn step_2(&self) -> Result<i32, std::fmt::Error> {
@@ -42,21 +42,24 @@ fn build_line(input: &String) -> String {
     let mut f_string = String::new();
     let mut i = 0;
     let mut current_id = 0;
+
     while i < input.len() {
-        let mut current = input.as_bytes()[i] as char;
+        let current = input.as_bytes()[i] as char;
+
+        // File blocks
         for _ in 0..current.to_digit(10).unwrap() {
             f_string.push_str(&current_id.to_string());
         }
         current_id += 1;
         i += 1;
-        println!("{:?}", i);
+
         if i >= input.len() {
-            //last one check
             break;
         }
-        current = input.as_bytes()[i] as char;
-        //now the free space
-        for _ in 0..current.to_digit(10).unwrap() {
+
+        let free_space = input.as_bytes()[i] as char;
+        // Free space blocks
+        for _ in 0..free_space.to_digit(10).unwrap() {
             f_string.push('.');
         }
         i += 1;
@@ -65,26 +68,32 @@ fn build_line(input: &String) -> String {
     f_string
 }
 
-fn build_queue(line: &String) -> VecDeque<i32> {
-    let mut queue: VecDeque<i32> = VecDeque::new();
+fn build_queue(line: &String) -> VecDeque<i128> {
+    let mut queue: VecDeque<i128> = VecDeque::new();
     let mut start = 0;
     let mut end = line.len() - 1;
+
     while start <= end {
-        let current_el = line.as_bytes()[start] as char;
-        if current_el != '.' {
-            //is digit
-            queue.push_back(current_el.to_digit(10).unwrap() as i32);
+        let current_start = line.as_bytes()[start] as char;
+
+        if current_start != '.' {
+            // Push the digit from the start
+            queue.push_back(current_start.to_digit(10).unwrap() as i128);
         } else {
-            //we are on a free space
-            while line.as_bytes()[end] as char == '.' && end >= start {
+            // Find the nearest digit from the end
+            while end >= start && line.as_bytes()[end] as char == '.' {
                 end -= 1;
             }
-            //we are on a digit, enque it
-            queue.push_back((line.as_bytes()[end] as char).to_digit(10).unwrap() as i32);
+            if end < start {
+                break;
+            }
+            let current_end = line.as_bytes()[end] as char;
+            queue.push_back(current_end.to_digit(10).unwrap() as i128);
             end -= 1;
         }
-        //in all cases we need to move forward
+
         start += 1;
     }
+
     queue
 }
